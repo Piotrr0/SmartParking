@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: parking-db
+    environment:
+      MYSQL_DATABASE: parking_db
+      MYSQL_ROOT_PASSWORD: parking_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    container_name: parking-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+    restart: on-failure
+
+volumes:
+  mysql_data:
