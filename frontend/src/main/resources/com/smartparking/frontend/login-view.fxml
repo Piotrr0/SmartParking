@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.smartparking.frontend.LoginController"
+           style="-fx-background-color: #e9ecef;">
+
+    <!-- Login Card -->
+    <VBox fx:id="loginCard" maxWidth="350" spacing="15" alignment="CENTER"
+          style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+
+        <padding><Insets top="40" right="30" bottom="40" left="30"/></padding>
+
+        <Text text="Smart Parking" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #495057;"/>
+        <Label text="Welcome back" style="-fx-text-fill: #6c757d; -fx-padding: 0 0 10 0;"/>
+
+        <TextField fx:id="loginUser" promptText="Username" styleClass="form-control"/>
+        <PasswordField fx:id="loginPass" promptText="Password" styleClass="form-control"/>
+
+        <Label fx:id="statusLabel" visible="false" style="-fx-text-fill: #dc3545;"/>
+
+        <Button text="Sign In" onAction="#doLogin" maxWidth="Infinity" styleClass="btn, btn-primary"/>
+
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="New here?"/>
+            <Hyperlink text="Create Account" onAction="#switchToRegister" style="-fx-text-fill: #0d6efd;"/>
+        </HBox>
+    </VBox>
+
+    <VBox fx:id="registerCard" maxWidth="350" spacing="15" alignment="CENTER" visible="false"
+          style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+
+        <padding><Insets top="40" right="30" bottom="40" left="30"/></padding>
+
+        <Text text="Create Account" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #495057;"/>
+        <Label text="Join the network" style="-fx-text-fill: #6c757d; -fx-padding: 0 0 10 0;"/>
+
+        <TextField fx:id="regUser" promptText="Username" styleClass="form-control"/>
+        <TextField fx:id="regEmail" promptText="Email" styleClass="form-control"/>
+        <PasswordField fx:id="regPass" promptText="Password" styleClass="form-control"/>
+
+        <Button text="Register" onAction="#doRegister" maxWidth="Infinity" styleClass="btn, btn-success"/>
+
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Already have an account?"/>
+            <Hyperlink text="Sign In" onAction="#switchToLogin" style="-fx-text-fill: #0d6efd;"/>
+        </HBox>
+    </VBox>
+
+</StackPane>

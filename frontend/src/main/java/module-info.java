@@ -8,6 +8,10 @@ module com.smartparking.frontend {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
 
+    requires java.net.http;
+    requires com.fasterxml.jackson.databind;
+
     opens com.smartparking.frontend to javafx.fxml;
+    opens com.smartparking.frontend.dto to com.fasterxml.jackson.databind;
     exports com.smartparking.frontend;
 }
