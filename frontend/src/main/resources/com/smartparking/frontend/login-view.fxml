@@ -9,7 +9,6 @@
            fx:controller="com.smartparking.frontend.LoginController"
            style="-fx-background-color: #e9ecef;">
 
-    <!-- Login Card -->
     <VBox fx:id="loginCard" maxWidth="350" spacing="15" alignment="CENTER"
           style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
 

@@ -3,8 +3,13 @@ package com.smartparking.frontend;
 import com.smartparking.frontend.service.AuthService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 public class LoginController {
 
@@ -38,8 +43,7 @@ public class LoginController {
                         statusLabel.setVisible(true);
                         switchToLogin();
                     } else {
-                        System.out.println("LOGIN SUCCESS -> Load Dashboard");
-                        // TODO: scene.setRoot(dashboardRoot);
+                        openDashboard(user);
                     }
                 } else {
                     statusLabel.setText("Invalid credentials or server error.");
@@ -48,6 +52,30 @@ public class LoginController {
                 }
             });
         }).start();
+    }
+
+    private void openDashboard(String username) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("dashboard-view.fxml"));
+            Parent root = loader.load();
+
+            DashboardController dashboardController = loader.getController();
+            dashboardController.setUsername(username);
+
+            Stage stage = (Stage) loginUser.getScene().getWindow();
+            Scene scene = new Scene(root, 900, 600);
+
+            scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+
+            stage.setScene(scene);
+            stage.centerOnScreen();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            statusLabel.setText("Error loading dashboard");
+            statusLabel.setVisible(true);
+        }
     }
 
     @FXML
