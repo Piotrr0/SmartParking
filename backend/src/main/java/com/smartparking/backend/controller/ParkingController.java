@@ -4,6 +4,7 @@ import com.smartparking.backend.entity.ParkingArea;
 import com.smartparking.backend.entity.ParkingSpot;
 import com.smartparking.backend.repository.ParkingAreaRepository;
 import com.smartparking.backend.repository.ParkingSpotRepository;
+import com.smartparking.backend.dto.ParkingAreaRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,14 @@ public class ParkingController {
         );
         spotRepository.save(spot);
         return ResponseEntity.ok("Spot added successfully");
+    }
+
+    @PostMapping("/areas/add")
+    public ResponseEntity<String> addParkingArea(@RequestBody ParkingAreaRequest request) {
+        ParkingArea area = new ParkingArea(request.getName(), request.getCity());
+
+        areaRepository.save(area);
+        return ResponseEntity.ok("Parking Area Created Successfully");
     }
 
     public record ParkingSpotRequest(Long areaId, String label, double price, String type) {}

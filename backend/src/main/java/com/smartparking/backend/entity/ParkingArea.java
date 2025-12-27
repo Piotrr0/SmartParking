@@ -1,35 +1,33 @@
 package com.smartparking.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "parking_spots")
-public class ParkingSpot {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "parking_areas")
+public class ParkingArea {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String label;
-    private boolean occupied;
-    private double pricePerHour;
-    private String type;
+    private String name;
+    private String city;
 
-    @ManyToOne
-    @JoinColumn(name = "area_id")
-    @JsonIgnore
-    private ParkingArea parkingArea;
+    @OneToMany(mappedBy = "parkingArea", cascade = CascadeType.ALL)
+    private List<ParkingSpot> spots;
 
-    public ParkingSpot() {}
-    public ParkingSpot(String label, double price, String type, ParkingArea area) {
-        this.label = label;
-        this.pricePerHour = price;
-        this.type = type;
-        this.parkingArea = area;
-        this.occupied = false;
+    public ParkingArea() {}
+
+    public ParkingArea(String name, String city) {
+        this.name = name;
+        this.city = city;
     }
 
     public Long getId() { return id; }
-    public String getLabel() { return label; }
-    public boolean isOccupied() { return occupied; }
-    public double getPricePerHour() { return pricePerHour; }
-
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+    public List<ParkingSpot> getSpots() { return spots; }
+    public void setSpots(List<ParkingSpot> spots) { this.spots = spots; }
+}
