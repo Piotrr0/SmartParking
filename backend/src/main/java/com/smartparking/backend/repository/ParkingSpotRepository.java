@@ -1,0 +1,1 @@
+public interface ParkingSpotRepository extends JpaRepository<ParkingSpot, Long> {}
