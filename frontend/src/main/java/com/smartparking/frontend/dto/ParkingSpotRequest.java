@@ -9,11 +9,12 @@ public class ParkingSpotRequest {
     private Long areaId;
 
     public ParkingSpotRequest() {}
-    public ParkingSpotRequest(String label, Double pricePerHour, String type, Long areaId) {
+    public ParkingSpotRequest(String label, Double pricePerHour, String type, Long areaId, boolean occupied) {
         this.label = label;
         this.pricePerHour = pricePerHour;
         this.type = type;
         this.areaId = areaId;
+        this.occupied = occupied;
     }
 
     public Long getId() { return id; }

@@ -20,12 +20,12 @@ public class ParkingSpot {
     private ParkingArea parkingArea;
 
     public ParkingSpot() {}
-    public ParkingSpot(String label, double price, String type, ParkingArea area) {
+    public ParkingSpot(String label, double price, String type, ParkingArea area, boolean occupied) {
         this.label = label;
         this.pricePerHour = price;
         this.type = type;
         this.parkingArea = area;
-        this.occupied = false;
+        this.occupied = occupied;
     }
 
     public Long getId() { return id; }

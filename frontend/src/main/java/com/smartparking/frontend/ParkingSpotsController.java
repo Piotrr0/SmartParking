@@ -52,7 +52,6 @@ public class ParkingSpotsController {
 
     private VBox createSpotCard(ParkingSpotRequest spot) {
         VBox card = new VBox(5);
-        String colorClass = spot.isOccupied() ? "btn-danger" : "btn-success";
         card.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-color: #dee2e6; -fx-border-radius: 5;");
         card.setPrefWidth(120);
 
@@ -67,15 +66,23 @@ public class ParkingSpotsController {
         Label price = new Label(priceText);
         price.setStyle("-fx-text-fill: #212529; -fx-font-weight: bold;");
 
-        Button statusBtn = new Button(spot.isOccupied() ? "Occupied" : "Book");
-        statusBtn.getStyleClass().addAll("btn", "btn-sm", colorClass);
+        Button statusBtn = new Button();
         statusBtn.setMaxWidth(Double.MAX_VALUE);
+        statusBtn.getStyleClass().add("btn");
 
-        statusBtn.setOnAction(e -> {
-            if(!spot.isOccupied()) {
+        if (spot.isOccupied()) {
+            statusBtn.setText("Occupied");
+            statusBtn.getStyleClass().add("btn-danger");
+            statusBtn.setDisable(true);
+        } else {
+            statusBtn.setText("Book");
+            statusBtn.getStyleClass().add("btn-success");
+            statusBtn.setDisable(false);
+
+            statusBtn.setOnAction(e -> {
                 System.out.println("Booking spot ID: " + spot.getId());
-            }
-        });
+            });
+        }
 
         card.getChildren().addAll(label, type, price, statusBtn);
         return card;
