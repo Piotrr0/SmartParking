@@ -25,7 +25,7 @@ public class ParkingController {
         return areaRepository.findAll();
     }
 
-    @PostMapping("/add-spot")
+    @PostMapping("/spots/add")
     public ResponseEntity<String> addSpot(@RequestBody ParkingSpotRequest request) {
         ParkingArea area = areaRepository.findById(request.areaId())
                 .orElseThrow(() -> new RuntimeException("Area not found"));
