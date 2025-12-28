@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/parking")
@@ -34,7 +35,8 @@ public class ParkingController {
                 request.label(),
                 request.price(),
                 request.type(),
-                area
+                area,
+                false
         );
         spotRepository.save(spot);
         return ResponseEntity.ok("Spot added successfully");
@@ -46,6 +48,13 @@ public class ParkingController {
 
         areaRepository.save(area);
         return ResponseEntity.ok("Parking Area Created Successfully");
+    }
+
+    @GetMapping("/areas/{id}")
+    public ResponseEntity<ParkingArea> getAreaById(@PathVariable Long id) {
+        return areaRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     public record ParkingSpotRequest(Long areaId, String label, double price, String type) {}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.smartparking.frontend.ParkingSpotsController"
+            prefWidth="900" prefHeight="600"
+            style="-fx-background-color: #e9ecef;">
+
+    <top>
+        <HBox spacing="20" style="-fx-background-color: white; -fx-padding: 15;">
+            <Button text="← Back" onAction="#handleBack" styleClass="btn, btn-secondary"/>
+            <VBox>
+                <Text fx:id="areaNameText" text="Loading..." style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label fx:id="areaCityLabel" text="Loading..." style="-fx-text-fill: #6c757d;"/>
+            </VBox>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+            <FlowPane fx:id="spotsContainer" hgap="15" vgap="15">
+            </FlowPane>
+        </ScrollPane>
+    </center>
+</BorderPane>

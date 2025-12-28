@@ -58,10 +58,7 @@ public class DashboardController {
         viewBtn.getStyleClass().addAll("btn", "btn-primary");
         viewBtn.setMaxWidth(Double.MAX_VALUE);
 
-        viewBtn.setOnAction(e -> {
-            System.out.println("Clicked on area ID: " + area.getId());
-        });
-
+        viewBtn.setOnAction(e -> openSpotsView(area.getId()));
         card.getChildren().addAll(name, city, viewBtn);
         return card;
     }
@@ -82,6 +79,28 @@ public class DashboardController {
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void openSpotsView(Long areaId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("spots-view.fxml"));
+            Parent root = loader.load();
+
+            ParkingSpotsController controller = loader.getController();
+            controller.initData(areaId);
+
+            Stage stage = (Stage) parkingGrid.getScene().getWindow();
+            Scene scene = new Scene(root);
+
+            scene.getStylesheets().addAll(
+                    BootstrapFX.bootstrapFXStylesheet(),
+                    ParkingApplication.class.getResource("styles.css").toExternalForm()
+            );
+
+            stage.setScene(scene);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }
