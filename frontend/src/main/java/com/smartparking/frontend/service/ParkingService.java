@@ -53,4 +53,22 @@ public class ParkingService {
             return false;
         }
     }
+
+    public ParkingAreaRequest getParkingAreaById(Long id) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL + "/areas/" + id))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return mapper.readValue(response.body(), ParkingAreaRequest.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

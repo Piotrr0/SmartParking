@@ -32,4 +32,5 @@ public class ParkingSpot {
     public String getLabel() { return label; }
     public boolean isOccupied() { return occupied; }
     public double getPricePerHour() { return pricePerHour; }
+    public String getType() { return type; }
 }

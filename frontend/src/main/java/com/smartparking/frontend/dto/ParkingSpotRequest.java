@@ -1,6 +1,8 @@
 package com.smartparking.frontend.dto;
 
 public class ParkingSpotRequest {
+    private Long id;
+    private boolean occupied;
     private String label;
     private Double pricePerHour;
     private String type;
@@ -14,6 +16,10 @@ public class ParkingSpotRequest {
         this.areaId = areaId;
     }
 
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public boolean isOccupied() { return occupied; }
+    public void setOccupied(boolean occupied) { this.occupied = occupied; }
     public String getLabel() { return label; }
     public void setLabel(String label) { this.label = label; }
     public Double getPricePerHour() { return pricePerHour; }
