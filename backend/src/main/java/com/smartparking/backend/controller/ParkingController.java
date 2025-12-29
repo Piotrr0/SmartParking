@@ -38,7 +38,8 @@ public class ParkingController {
                 request.price(),
                 request.type(),
                 area,
-                false
+                false,
+                null
         );
         spotRepository.save(spot);
         return ResponseEntity.ok("Spot added successfully");
