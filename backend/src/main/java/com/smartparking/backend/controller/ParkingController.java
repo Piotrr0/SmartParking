@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+
 
 @RestController
 @RequestMapping("/api/parking")
@@ -54,6 +56,21 @@ public class ParkingController {
     public ResponseEntity<ParkingArea> getAreaById(@PathVariable Long id) {
         return areaRepository.findById(id)
                 .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/spots/{id}/book")
+    public ResponseEntity<String> bookSpot(@PathVariable Long id, @RequestParam int hours) {
+        return spotRepository.findById(id)
+                .map(spot -> {
+                    if (spot.isOccupied()) {
+                        return ResponseEntity.badRequest().body("Spot is already occupied");
+                    }
+                    spot.setOccupied(true);
+                    spot.setExpirationTime(LocalDateTime.now().plusHours(hours));
+                    spotRepository.save(spot);
+                    return ResponseEntity.ok("Spot booked for " + hours + " hours");
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 

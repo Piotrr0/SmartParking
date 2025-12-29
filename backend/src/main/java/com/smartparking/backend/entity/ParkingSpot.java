@@ -2,6 +2,7 @@ package com.smartparking.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "parking_spots")
@@ -13,6 +14,8 @@ public class ParkingSpot {
     private boolean occupied;
     private double pricePerHour;
     private String type;
+
+    private LocalDateTime expirationTime;
 
     @ManyToOne
     @JoinColumn(name = "area_id")
@@ -31,6 +34,9 @@ public class ParkingSpot {
     public Long getId() { return id; }
     public String getLabel() { return label; }
     public boolean isOccupied() { return occupied; }
+    public void setOccupied(boolean occupied) { this.occupied = occupied; }
     public double getPricePerHour() { return pricePerHour; }
     public String getType() { return type; }
+    public LocalDateTime getExpirationTime() { return expirationTime; }
+    public void setExpirationTime(LocalDateTime expirationTime) { this.expirationTime = expirationTime; }
 }
