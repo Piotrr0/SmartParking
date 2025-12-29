@@ -8,5 +8,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ParkingSpotRepository extends JpaRepository<ParkingSpot, Long> {
-    List<ParkingSpot> findByOccupiedAndExpirationTimeBefore(LocalDateTime now);
+    List<ParkingSpot> findByOccupiedTrueAndExpirationTimeBefore(LocalDateTime now);
 }

@@ -20,7 +20,7 @@ public class SpotExpirationService {
     @Transactional
     public void freeExpiredSpots() {
         LocalDateTime now = LocalDateTime.now();
-        List<ParkingSpot> expiredSpots = spotRepository.findByOccupiedAndExpirationTimeBefore(now);
+        List<ParkingSpot> expiredSpots = spotRepository.findByOccupiedTrueAndExpirationTimeBefore(now);
 
         if (!expiredSpots.isEmpty()) {
             System.out.println("Found " + expiredSpots.size() + " expired spots.");
