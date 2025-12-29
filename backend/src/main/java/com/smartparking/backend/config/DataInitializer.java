@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,19 +29,19 @@ public class DataInitializer {
             ParkingArea area3 = new ParkingArea("Airport Long-Term", "Gdansk");
 
             List<ParkingSpot> spots1 = new ArrayList<>();
-            spots1.add(new ParkingSpot("A-01", 5.00, "STANDARD", area1, true));
-            spots1.add(new ParkingSpot("A-02", 5.00, "STANDARD", area1, false));
-            spots1.add(new ParkingSpot("B-01", 8.50, "EV_CHARGING", area1, true));
+            spots1.add(new ParkingSpot("A-01", 5.00, "STANDARD", area1, true, LocalDateTime.now().plusHours(1)));
+            spots1.add(new ParkingSpot("A-02", 5.00, "STANDARD", area1, false, null));
+            spots1.add(new ParkingSpot("B-01", 8.50, "EV_CHARGING", area1, true, LocalDateTime.now().plusMinutes(5)));
             area1.setSpots(spots1);
 
             List<ParkingSpot> spots2 = new ArrayList<>();
-            spots2.add(new ParkingSpot("C-10", 4.00, "STANDARD", area2, false));
-            spots2.add(new ParkingSpot("C-11", 4.00, "STANDARD", area2, false));
-            spots2.add(new ParkingSpot("D-05", 2.00, "HANDICAPPED", area2, false));
+            spots2.add(new ParkingSpot("C-10", 4.00, "STANDARD", area2, false, null));
+            spots2.add(new ParkingSpot("C-11", 4.00, "STANDARD", area2, false, null));
+            spots2.add(new ParkingSpot("D-05", 2.00, "HANDICAPPED", area2, false, null));
 
             area2.setSpots(spots2);
             List<ParkingSpot> spots3 = new ArrayList<>();
-            spots3.add(new ParkingSpot("L-99", 12.00, "VIP", area3, true));
+            spots3.add(new ParkingSpot("L-99", 12.00, "VIP", area3, true, null));
 
             area3.setSpots(spots3);
             areaRepository.saveAll(List.of(area1, area2, area3));
