@@ -79,13 +79,30 @@ public class ParkingSpotsController {
             statusBtn.getStyleClass().add("btn-success");
             statusBtn.setDisable(false);
 
-            statusBtn.setOnAction(e -> {
-                System.out.println("Booking spot ID: " + spot.getId());
-            });
+            statusBtn.setOnAction(e -> openBookingWindow(spot));
         }
-
         card.getChildren().addAll(label, type, price, statusBtn);
         return card;
+    }
+
+    private void openBookingWindow(ParkingSpotRequest spot) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("booking-view.fxml"));
+            Parent root = loader.load();
+
+            BookingViewController controller = loader.getController();
+            controller.initData(spot.getId(), spot.getLabel(), spot.getPricePerHour(), currentAreaId);
+
+            Stage stage = (Stage) spotsContainer.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().addAll(
+                    BootstrapFX.bootstrapFXStylesheet(),
+                    getClass().getResource("styles.css").toExternalForm()
+            );
+            stage.setScene(scene);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML

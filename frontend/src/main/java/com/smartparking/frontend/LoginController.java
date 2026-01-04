@@ -1,5 +1,6 @@
 package com.smartparking.frontend;
 
+import com.smartparking.frontend.dto.AuthResponse;
 import com.smartparking.frontend.service.AuthService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -22,31 +23,42 @@ public class LoginController {
 
     @FXML
     public void doLogin() {
-        processAuth("/login", loginUser.getText(), loginPass.getText(), null);
+        statusLabel.setVisible(false);
+        String user = loginUser.getText();
+        String pass = loginPass.getText();
+
+        new Thread(() -> {
+            AuthResponse response = authService.login(user, pass);
+            Platform.runLater(() -> {
+                if (response != null && response.getId() != null) {
+                    UserSession.setSession(response.getId(), response.getUsername());
+                    openDashboard(response.getUsername());
+                } else {
+                    statusLabel.setText("Invalid credentials.");
+                    statusLabel.setStyle("-fx-text-fill: red;");
+                    statusLabel.setVisible(true);
+                }
+            });
+        }).start();
     }
 
     @FXML
     public void doRegister() {
-        processAuth("/register", regUser.getText(), regPass.getText(), regEmail.getText());
-    }
-
-    private void processAuth(String endpoint, String user, String pass, String email) {
         statusLabel.setVisible(false);
+        String user = regUser.getText();
+        String pass = regPass.getText();
+        String email = regEmail.getText();
 
         new Thread(() -> {
-            boolean success = authService.authenticate(endpoint, user, pass, email);
+            boolean success = authService.register(user, pass, email);
             Platform.runLater(() -> {
                 if (success) {
-                    if (endpoint.equals("/register")) {
-                        statusLabel.setText("Registration successful! Please login.");
-                        statusLabel.setStyle("-fx-text-fill: green;");
-                        statusLabel.setVisible(true);
-                        switchToLogin();
-                    } else {
-                        openDashboard(user);
-                    }
+                    statusLabel.setText("Registration successful! Please login.");
+                    statusLabel.setStyle("-fx-text-fill: green;");
+                    statusLabel.setVisible(true);
+                    switchToLogin();
                 } else {
-                    statusLabel.setText("Invalid credentials or server error.");
+                    statusLabel.setText("Registration failed. Username may exist.");
                     statusLabel.setStyle("-fx-text-fill: red;");
                     statusLabel.setVisible(true);
                 }
