@@ -3,22 +3,21 @@ package com.smartparking.frontend;
 import com.smartparking.frontend.dto.ParkingAreaRequest;
 import com.smartparking.frontend.service.ParkingService;
 import com.smartparking.frontend.dto.ParkingSpotRequest;
-import com.smartparking.frontend.DashboardController;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
-
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class ParkingSpotsController {
 
@@ -26,26 +25,53 @@ public class ParkingSpotsController {
     @FXML private Label areaCityLabel;
     @FXML private FlowPane spotsContainer;
 
+    @FXML private DatePicker dateFilter;
+    @FXML private ComboBox<Integer> timeFilter;
+    @FXML private TextField durationFilter;
+
     private final ParkingService parkingService = new ParkingService();
     private Long currentAreaId;
 
     public void initData(Long areaId) {
         this.currentAreaId = areaId;
-        loadSpots();
+
+        dateFilter.setValue(LocalDate.now());
+        for (int i = 0; i < 24; i++) timeFilter.getItems().add(i);
+
+        int nextHour = LocalTime.now().plusHours(1).getHour();
+        timeFilter.setValue(nextHour);
+
+        handleCheckAvailability();
     }
 
-    private void loadSpots() {
-        ParkingAreaRequest area = parkingService.getParkingAreaById(currentAreaId);
+    @FXML
+    public void handleCheckAvailability() {
+        if (dateFilter.getValue() == null || timeFilter.getValue() == null || durationFilter.getText().isEmpty()) {
+            return;
+        }
 
+        LocalDateTime selectedStart = LocalDateTime.of(dateFilter.getValue(), LocalTime.of(timeFilter.getValue(), 0));
+        int duration = 2;
+        try {
+            duration = Integer.parseInt(durationFilter.getText());
+        } catch (NumberFormatException e) {
+            durationFilter.setText("2");
+        }
+
+        ParkingAreaRequest area = parkingService.getParkingAreaAvailability(currentAreaId, selectedStart.toString(), duration);
         if (area != null) {
-            areaNameText.setText(area.getName());
-            areaCityLabel.setText(area.getCity());
-            spotsContainer.getChildren().clear();
+            updateUI(area);
+        }
+    }
 
-            if (area.getSpots() != null) {
-                for (ParkingSpotRequest spot : area.getSpots()) {
-                    spotsContainer.getChildren().add(createSpotCard(spot));
-                }
+    private void updateUI(ParkingAreaRequest area) {
+        areaNameText.setText(area.getName());
+        areaCityLabel.setText(area.getCity());
+        spotsContainer.getChildren().clear();
+
+        if (area.getSpots() != null) {
+            for (ParkingSpotRequest spot : area.getSpots()) {
+                spotsContainer.getChildren().add(createSpotCard(spot));
             }
         }
     }
@@ -71,14 +97,13 @@ public class ParkingSpotsController {
         statusBtn.getStyleClass().add("btn");
 
         if (spot.isOccupied()) {
-            statusBtn.setText("Occupied");
+            statusBtn.setText("Unavailable");
             statusBtn.getStyleClass().add("btn-danger");
             statusBtn.setDisable(true);
         } else {
             statusBtn.setText("Book");
             statusBtn.getStyleClass().add("btn-success");
             statusBtn.setDisable(false);
-
             statusBtn.setOnAction(e -> openBookingWindow(spot));
         }
         card.getChildren().addAll(label, type, price, statusBtn);
@@ -91,7 +116,9 @@ public class ParkingSpotsController {
             Parent root = loader.load();
 
             BookingViewController controller = loader.getController();
-            controller.initData(spot.getId(), spot.getLabel(), spot.getPricePerHour(), currentAreaId);
+            LocalDateTime start = LocalDateTime.of(dateFilter.getValue(), LocalTime.of(timeFilter.getValue(), 0));
+            int duration = Integer.parseInt(durationFilter.getText());
+            controller.initData(spot.getId(), spot.getLabel(), spot.getPricePerHour(), currentAreaId, start, duration);
 
             Stage stage = (Stage) spotsContainer.getScene().getWindow();
             Scene scene = new Scene(root);

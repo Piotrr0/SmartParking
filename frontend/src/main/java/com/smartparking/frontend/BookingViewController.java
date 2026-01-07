@@ -1,7 +1,6 @@
 package com.smartparking.frontend;
 
 import com.smartparking.frontend.service.BookingService;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,15 +31,18 @@ public class BookingViewController {
     private Long areaId;
     private double pricePerHour;
 
-    public void initData(Long spotId, String spotLabel, double price, Long areaId) {
+    public void initData(Long spotId, String spotLabel, double price, Long areaId, LocalDateTime startDateTime, int duration) {
         this.spotId = spotId;
         this.pricePerHour = price;
         this.areaId = areaId;
 
         spotLabelText.setText(spotLabel);
         hourlyRateLabel.setText("$" + price + " / hr");
-        datePicker.setValue(LocalDate.now());
+
+        datePicker.setValue(startDateTime.toLocalDate());
         setupTimeSpinner();
+        timeSpinner.setValue(startDateTime.getHour());
+        durationField.setText(String.valueOf(duration));
 
         if (UserSession.getInstance() != null) {
             cardHolderField.setText(UserSession.getInstance().getUsername());
@@ -51,10 +53,11 @@ public class BookingViewController {
     }
 
     private void setupTimeSpinner() {
-        for (int i = 0; i < 24; i++) {
-            timeSpinner.getItems().add(i);
+        if(timeSpinner.getItems().isEmpty()){
+            for (int i = 0; i < 24; i++) {
+                timeSpinner.getItems().add(i);
+            }
         }
-        timeSpinner.setValue(LocalTime.now().plusHours(1).getHour());
     }
 
     private void calculateTotal() {

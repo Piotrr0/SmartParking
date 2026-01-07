@@ -35,29 +35,30 @@ public class ParkingService {
         return Collections.emptyList();
     }
 
-    public boolean addParkingArea(String name, String city) {
-        try {
-            ParkingAreaRequest dto = new ParkingAreaRequest(null, name, city);
-            String json = mapper.writeValueAsString(dto);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL + "/areas/add"))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public ParkingAreaRequest getParkingAreaById(Long id) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL + "/areas/" + id))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                return mapper.readValue(response.body(), ParkingAreaRequest.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ParkingAreaRequest getParkingAreaAvailability(Long areaId, String startDateTime, int durationHours) {
+        try {
+            String url = String.format("%s/areas/%d/availability?start=%s&duration=%d",
+                    API_URL, areaId, startDateTime, durationHours);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
                     .GET()
                     .build();
 

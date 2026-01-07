@@ -24,38 +24,42 @@ public class BookingController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createBooking(@RequestBody BookingRequest request) {
-        LocalDateTime endTime = request.getStartTime().plusHours(request.getDurationInHours());
-        List<Booking> overlaps = bookingRepository.findOverlappingBookings(
-                request.getSpotId(),
-                request.getStartTime(),
-                endTime
-        );
+        try {
+            LocalDateTime startTime = request.getStartTime();
+            LocalDateTime endTime = startTime.plusHours(request.getDurationInHours());
+            List<Booking> overlaps = bookingRepository.findOverlappingBookings(
+                    request.getSpotId(),
+                    startTime,
+                    endTime
+            );
 
-        if (!overlaps.isEmpty()) {
-            return ResponseEntity.badRequest().body("Spot is already booked for this time period.");
+            if (!overlaps.isEmpty()) {
+                return ResponseEntity.badRequest().body("Spot is already booked for this time period.");
+            }
+
+            ParkingSpot spot = spotRepository.findById(request.getSpotId())
+                    .orElseThrow(() -> new RuntimeException("Spot not found"));
+            User user = userRepository.findById(request.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            if (request.getCardNumber() == null || request.getCardNumber().length() < 10) {
+                return ResponseEntity.badRequest().body("Invalid Card Number");
+            }
+
+            double price = spot.getPricePerHour() * request.getDurationInHours();
+            Booking booking = new Booking(user, spot, startTime, endTime, price, "PAID");
+            bookingRepository.save(booking);
+
+            LocalDateTime now = LocalDateTime.now();
+            if (startTime.isBefore(now.plusMinutes(5)) && endTime.isAfter(now)) {
+                spot.setOccupied(true);
+                spotRepository.save(spot);
+            }
+
+            return ResponseEntity.ok("Booking confirmed! Total: $" + String.format("%.2f", price));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
-
-        ParkingSpot spot = spotRepository.findById(request.getSpotId()).orElseThrow(() -> new RuntimeException("Spot not found"));
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (request.getCardNumber() == null || request.getCardNumber().length() < 16) {
-            return ResponseEntity.badRequest().body("Invalid Card Number");
-        }
-        double price = spot.getPricePerHour() * request.getDurationInHours();
-        Booking booking = new Booking(
-                user,
-                spot,
-                request.getStartTime(),
-                endTime,
-                price,
-                "PAID"
-        );
-        bookingRepository.save(booking);
-        if (request.getStartTime().isBefore(LocalDateTime.now().plusMinutes(5))) {
-            spot.setOccupied(true);
-            spotRepository.save(spot);
-        }
-
-        return ResponseEntity.ok("Booking confirmed! Total: " + price);
     }
 }
