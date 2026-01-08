@@ -44,7 +44,8 @@
                 <HBox HBox.hgrow="ALWAYS"/>
                 <Button text="Refresh" onAction="#loadParkingData" styleClass="btn, btn-primary"/>
             </HBox>
-            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+
+            <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
                 <FlowPane fx:id="parkingGrid" hgap="20" vgap="20" prefWrapLength="800">
                 </FlowPane>
             </ScrollPane>
