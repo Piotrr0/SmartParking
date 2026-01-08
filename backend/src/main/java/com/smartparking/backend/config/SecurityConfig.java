@@ -18,6 +18,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/parking/**").permitAll()
+                        .requestMatchers("/api/bookings/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
