@@ -8,6 +8,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BookingService {
     private static final String API_URL = "http://localhost:8080/api/bookings";
@@ -16,7 +17,11 @@ public class BookingService {
 
     public String createBooking(Long userId, Long spotId, LocalDateTime start, int hours, String cardNum, String name) {
         try {
-            BookingRequest bookingRequest = new BookingRequest(userId, spotId, start.toString(), hours, cardNum, name);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            String formattedDate = start.format(formatter);
+
+            BookingRequest bookingRequest = new BookingRequest(userId, spotId, formattedDate, hours, cardNum, name);
+
             String jsonBody = mapper.writeValueAsString(bookingRequest);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL + "/create"))
@@ -28,7 +33,7 @@ public class BookingService {
             if (response.statusCode() == 200) {
                 return response.body();
             } else {
-                return "Error: " + response.body();
+                return "Error (" + response.statusCode() + "): " + response.body();
             }
 
         } catch (Exception e) {

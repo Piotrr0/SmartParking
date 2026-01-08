@@ -9,9 +9,11 @@ import com.smartparking.backend.repository.ParkingSpotRepository;
 import com.smartparking.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
@@ -25,7 +27,7 @@ public class BookingController {
     @PostMapping("/create")
     public ResponseEntity<?> createBooking(@RequestBody BookingRequest request) {
         try {
-            LocalDateTime startTime = request.getStartTime();
+            LocalDateTime startTime = request.getStartTime().truncatedTo(ChronoUnit.MINUTES);
             LocalDateTime endTime = startTime.plusHours(request.getDurationInHours());
             List<Booking> overlaps = bookingRepository.findOverlappingBookings(
                     request.getSpotId(),
@@ -42,7 +44,7 @@ public class BookingController {
             User user = userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            if (request.getCardNumber() == null || request.getCardNumber().length() < 10) {
+            if (request.getCardNumber() == null || request.getCardNumber().length() != 16) {
                 return ResponseEntity.badRequest().body("Invalid Card Number");
             }
 
@@ -53,6 +55,7 @@ public class BookingController {
             LocalDateTime now = LocalDateTime.now();
             if (startTime.isBefore(now.plusMinutes(5)) && endTime.isAfter(now)) {
                 spot.setOccupied(true);
+                spot.setExpirationTime(endTime);
                 spotRepository.save(spot);
             }
 
