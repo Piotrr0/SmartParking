@@ -18,6 +18,7 @@ public class BookingRequest {
         this.durationInHours = durationInHours;
         this.cardNumber = cardNumber;
         this.cardHolder = cardHolder;
+        this.paymentMethod = paymentMethod;
     }
 
     public Long getUserId() { return userId; }
@@ -32,4 +33,6 @@ public class BookingRequest {
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
     public String getCardHolder() { return cardHolder; }
     public void setCardHolder(String cardHolder) { this.cardHolder = cardHolder; }
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
 }
