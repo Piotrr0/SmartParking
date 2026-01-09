@@ -11,12 +11,13 @@
             style="-fx-background-color: #f8f9fa;">
 
     <top>
-        <HBox style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);">
-            <Button text="← Back to Dashboard" onAction="#handleBack" styleClass="btn, btn-secondary"/>
-            <Region HBox.hgrow="ALWAYS"/>
+        <StackPane style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);">
+
+            <Button text="← Back to Dashboard" onAction="#handleBack" styleClass="btn, btn-secondary"
+                    StackPane.alignment="CENTER_LEFT"/>
             <Text text="My Profile" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: #343a40;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-        </HBox>
+
+        </StackPane>
     </top>
 
     <center>
