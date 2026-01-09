@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
@@ -59,21 +60,28 @@ public class ProfileController {
     @FXML
     public void handleTopUp() {
         try {
-            double amount = Double.parseDouble(topUpField.getText());
-            new Thread(() -> {
-                boolean success = walletService.topUp(currentUserId, amount);
-                Platform.runLater(() -> {
-                    if (success) {
-                        topUpField.clear();
-                        loadWalletData();
-                        showAlert("Success", "Wallet charged successfully!");
-                    } else {
-                        showAlert("Error", "Failed to charge wallet.");
-                    }
-                });
-            }).start();
-        } catch (NumberFormatException e) {
-            showAlert("Error", "Invalid amount.");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("wallet-topup-view.fxml"));
+            Parent root = loader.load();
+
+            WalletTopUpController controller = loader.getController();
+            controller.setOnSuccessCallback(this::loadWalletData);
+
+            Stage stage = new Stage();
+            stage.setTitle("Add Funds");
+            stage.setScene(new Scene(root));
+            stage.getScene().getStylesheets().addAll(
+                    BootstrapFX.bootstrapFXStylesheet(),
+                    getClass().getResource("styles.css").toExternalForm()
+            );
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(balanceLabel.getScene().getWindow());
+
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Could not open payment window.");
         }
     }
 

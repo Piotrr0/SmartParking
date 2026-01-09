@@ -1,5 +1,7 @@
 package com.smartparking.frontend.service;
 
+import com.smartparking.frontend.dto.TopUpRequest;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
@@ -27,15 +29,32 @@ public class WalletService {
         return 0.0;
     }
 
-    public boolean topUp(Long userId, double amount) {
+    public String topUp(Long userId, double amount, String cardNum, String cardHolder, String cvv) {
         try {
+            TopUpRequest dto = new TopUpRequest();
+            dto.setAmount(amount);
+            dto.setCardNumber(cardNum);
+            dto.setCardHolder(cardHolder);
+            dto.setCvv(cvv);
+
+            String json = mapper.writeValueAsString(dto);
+
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL + "/" + userId + "/topup?amount=" + amount))
-                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .uri(URI.create(API_URL + "/" + userId + "/topup"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200;
-        } catch (Exception e) { e.printStackTrace(); }
-        return false;
+
+            if (response.statusCode() == 200) {
+                return "Success";
+            } else {
+                return response.body();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Connection Error";
+        }
     }
 }
