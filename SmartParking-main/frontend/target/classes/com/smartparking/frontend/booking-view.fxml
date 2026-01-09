@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.smartparking.frontend.BookingViewController"
+            prefWidth="900" prefHeight="600"
+            style="-fx-background-color: #f8f9fa;">
+
+    <top>
+        <HBox style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);">
+            <Button text="← Cancel" onAction="#handleCancel" styleClass="btn, btn-secondary"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Text text="Complete Your Reservation" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: #343a40;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="30" alignment="CENTER">
+            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+            <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);"
+                  prefWidth="300" minWidth="300">
+                <Text text="Booking Summary" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #495057;"/>
+                <Separator/>
+                <VBox spacing="5">
+                    <Label text="Parking Spot" style="-fx-text-fill: #6c757d; -fx-font-size: 12px;"/>
+                    <Label fx:id="spotLabelText" text="A-12" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Hourly Rate" style="-fx-text-fill: #6c757d; -fx-font-size: 12px;"/>
+                    <Label fx:id="hourlyRateLabel" text="10.00 / hr" style="-fx-font-size: 14px;"/>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+                <Separator/>
+
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Total Due:" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="totalPriceLabel" text="0.00" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="20" style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);"
+                  HBox.hgrow="ALWAYS" maxWidth="500">
+                <Text text="Date &amp; Time" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <HBox spacing="15">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Date"/>
+                        <DatePicker fx:id="datePicker" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Start Time"/>
+                        <ComboBox fx:id="timeSpinner" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+                <VBox>
+                    <Label text="Duration (Hours)"/>
+                    <TextField fx:id="durationField" text="2"/>
+                </VBox>
+                <Separator/>
+                <Text text="Payment Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <VBox>
+                    <Label text="Card Holder Name"/>
+                    <TextField fx:id="cardHolderField" promptText="e.g. John Doe"/>
+                </VBox>
+                <VBox>
+                    <Label text="Card Number"/>
+                    <TextField fx:id="cardNumberField" promptText="0000 0000 0000 0000"/>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Button text="Confirm &amp; Pay" onAction="#handleSubmit"
+                        styleClass="btn, btn-success"
+                        maxWidth="Infinity" style="-fx-font-size: 14px; -fx-padding: 10;"/>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

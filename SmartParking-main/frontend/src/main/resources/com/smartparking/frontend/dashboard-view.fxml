@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.smartparking.frontend.DashboardController"
+            prefWidth="900" prefHeight="600"
+            style="-fx-background-color: #e9ecef;">
+
+    <left>
+        <VBox spacing="10" style="-fx-background-color: #343a40; -fx-pref-width: 220;">
+            <padding><Insets top="20" right="15" bottom="20" left="15"/></padding>
+
+            <Text text="Smart Parking" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: white;"/>
+            <Label text="DASHBOARD" style="-fx-text-fill: #6c757d; -fx-font-size: 10px; -fx-padding: 10 0 5 0;"/>
+
+            <Button text="Overview" maxWidth="Infinity" styleClass="nav-btn-active"/>
+            <Button text="My Bookings" onAction="#handleMyBookings" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Profile" maxWidth="Infinity" styleClass="nav-btn">
+                <graphic>
+                </graphic>
+            </Button>
+
+            <VBox VBox.vgrow="ALWAYS"/>
+
+            <Button text="Logout" onAction="#handleLogout" maxWidth="Infinity" styleClass="btn, btn-danger"/>
+        </VBox>
+    </left>
+
+
+    <center>
+        <VBox spacing="20">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <VBox>
+                    <Text text="Dashboard" style="-fx-font-size: 24px; -fx-fill: #495057; -fx-font-weight: bold;"/>
+                    <Label fx:id="welcomeLabel" text="Welcome back, User" style="-fx-text-fill: #6c757d;"/>
+                </VBox>
+                <HBox HBox.hgrow="ALWAYS"/>
+                <Button text="Refresh" onAction="#loadParkingData" styleClass="btn, btn-primary"/>
+            </HBox>
+
+            <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+                <FlowPane fx:id="parkingGrid" hgap="20" vgap="20" prefWrapLength="800">
+                </FlowPane>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>
