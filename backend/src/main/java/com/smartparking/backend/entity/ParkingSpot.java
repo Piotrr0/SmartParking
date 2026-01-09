@@ -40,4 +40,6 @@ public class ParkingSpot {
     public String getType() { return type; }
     public LocalDateTime getExpirationTime() { return expirationTime; }
     public void setExpirationTime(LocalDateTime expirationTime) { this.expirationTime = expirationTime; }
+    public ParkingArea getParkingArea() { return parkingArea; }
+    public void setParkingArea(ParkingArea parkingArea) { this.parkingArea = parkingArea; }
 }

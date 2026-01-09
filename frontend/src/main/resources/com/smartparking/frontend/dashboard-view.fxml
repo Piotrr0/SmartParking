@@ -23,7 +23,7 @@
             <Label text="DASHBOARD" style="-fx-text-fill: #6c757d; -fx-font-size: 10px; -fx-padding: 10 0 5 0;"/>
 
             <Button text="Overview" maxWidth="Infinity" styleClass="nav-btn-active"/>
-            <Button text="My Bookings" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="My Bookings" onAction="#handleMyBookings" maxWidth="Infinity" styleClass="nav-btn"/>
             <Button text="Profile" onAction="#handleProfile" maxWidth="Infinity" styleClass="nav-btn"/>
 
             <VBox VBox.vgrow="ALWAYS"/>

@@ -1,6 +1,7 @@
 package com.smartparking.backend.controller;
 
 import com.smartparking.backend.dto.BookingRequest;
+import com.smartparking.backend.dto.BookingResponse;
 import com.smartparking.backend.entity.Booking;
 import com.smartparking.backend.entity.ParkingSpot;
 import com.smartparking.backend.entity.User;
@@ -15,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -79,5 +82,29 @@ public class BookingController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getUserBookings(@PathVariable Long userId) {
+        if (!userRepository.existsById(userId)) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        List<Booking> bookings = bookingRepository.findBookingsForUser(userId);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        List<BookingResponse> response = bookings.stream()
+                .map(b -> new BookingResponse(
+                        b.getId(),
+                        b.getSpot().getParkingArea() != null ? b.getSpot().getParkingArea().getName() : "Unknown Area",
+                        b.getSpot().getParkingArea() != null ? b.getSpot().getParkingArea().getCity() : "Unknown City",
+                        b.getSpot().getLabel(),
+                        b.getStartTime().format(formatter),
+                        b.getEndTime().format(formatter),
+                        b.getTotalPrice(),
+                        b.getPaymentStatus()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
     }
 }

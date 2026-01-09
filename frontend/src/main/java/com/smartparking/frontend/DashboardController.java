@@ -105,6 +105,26 @@ public class DashboardController {
     }
 
     @FXML
+    public void handleMyBookings() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("my-bookings-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            Scene scene = new Scene(root);
+
+            scene.getStylesheets().addAll(
+                    BootstrapFX.bootstrapFXStylesheet(),
+                    getClass().getResource("styles.css").toExternalForm()
+            );
+
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void handleProfile() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("profile-view.fxml"));
