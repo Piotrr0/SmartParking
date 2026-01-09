@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.smartparking.frontend.WalletTopUpController"
+      spacing="15" alignment="TOP_CENTER"
+      prefWidth="400" prefHeight="450"
+      style="-fx-background-color: white; -fx-padding: 30;">
+
+    <Text text="Add Funds to Wallet" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: #343a40;"/>
+    <Separator/>
+
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Amount to Add ($)" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="amountField" promptText="e.g. 50.00"/>
+    </VBox>
+
+    <VBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5; -fx-border-color: #dee2e6; -fx-border-radius: 5;">
+        <Label text="Credit Card Details" style="-fx-font-weight: bold; -fx-text-fill: #495057;"/>
+
+        <VBox spacing="2">
+            <Label text="Card Holder Name" style="-fx-font-size: 12px;"/>
+            <TextField fx:id="cardHolderField" promptText="John Doe"/>
+        </VBox>
+
+        <VBox spacing="2">
+            <Label text="Card Number" style="-fx-font-size: 12px;"/>
+            <TextField fx:id="cardNumberField" promptText="0000 0000 0000 0000"/>
+        </VBox>
+
+        <HBox spacing="10">
+            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                <Label text="Expiry" style="-fx-font-size: 12px;"/>
+                <TextField promptText="MM/YY"/>
+            </VBox>
+            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                <Label text="CVV" style="-fx-font-size: 12px;"/>
+                <TextField fx:id="cvvField" promptText="123"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <Label fx:id="errorLabel" text="" visible="false" wrapText="true" style="-fx-text-fill: red;"/>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10">
+        <Button text="Cancel" onAction="#handleCancel" styleClass="btn, btn-secondary" prefWidth="100"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Pay Securely" onAction="#handlePay" styleClass="btn, btn-success" prefWidth="150"/>
+    </HBox>
+
+</VBox>

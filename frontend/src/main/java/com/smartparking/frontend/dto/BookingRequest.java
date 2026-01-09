@@ -7,16 +7,18 @@ public class BookingRequest {
     private int durationInHours;
     private String cardNumber;
     private String cardHolder;
+    private String paymentMethod;
 
     public BookingRequest() {}
 
-    public BookingRequest(Long userId, Long spotId, String startTime, int durationInHours, String cardNumber, String cardHolder) {
+    public BookingRequest(Long userId, Long spotId, String startTime, int durationInHours, String cardNumber, String cardHolder, String paymentMethod) {
         this.userId = userId;
         this.spotId = spotId;
         this.startTime = startTime;
         this.durationInHours = durationInHours;
         this.cardNumber = cardNumber;
         this.cardHolder = cardHolder;
+        this.paymentMethod = paymentMethod;
     }
 
     public Long getUserId() { return userId; }
@@ -31,4 +33,6 @@ public class BookingRequest {
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
     public String getCardHolder() { return cardHolder; }
     public void setCardHolder(String cardHolder) { this.cardHolder = cardHolder; }
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
 }

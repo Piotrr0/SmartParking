@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class BookingRequest {
 
+    private String paymentMethod;
     private Long userId;
     private Long spotId;
     private LocalDateTime startTime;
@@ -33,4 +34,6 @@ public class BookingRequest {
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
     public String getCardHolder() { return cardHolder; }
     public void setCardHolder(String cardHolder) { this.cardHolder = cardHolder; }
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
 }
