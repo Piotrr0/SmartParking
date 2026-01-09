@@ -24,11 +24,12 @@
 
             <Button text="Overview" maxWidth="Infinity" styleClass="nav-btn-active"/>
             <Button text="My Bookings" maxWidth="Infinity" styleClass="nav-btn"/>
-            <Button text="Profile" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Profile" onAction="#handleProfile" maxWidth="Infinity" styleClass="nav-btn"/>
 
             <VBox VBox.vgrow="ALWAYS"/>
 
             <Button text="Logout" onAction="#handleLogout" maxWidth="Infinity" styleClass="btn, btn-danger"/>
+
         </VBox>
     </left>
 
