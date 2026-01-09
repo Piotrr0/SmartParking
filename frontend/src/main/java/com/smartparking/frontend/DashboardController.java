@@ -103,4 +103,24 @@ public class DashboardController {
             ex.printStackTrace();
         }
     }
+
+    @FXML
+    public void handleProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("profile-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            Scene scene = new Scene(root);
+
+            scene.getStylesheets().addAll(
+                    BootstrapFX.bootstrapFXStylesheet(),
+                    ParkingApplication.class.getResource("styles.css").toExternalForm()
+            );
+
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

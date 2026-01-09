@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.smartparking.frontend.ProfileController"
+            prefWidth="900" prefHeight="600"
+            style="-fx-background-color: #f8f9fa;">
+
+    <top>
+        <StackPane style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);">
+
+            <Button text="← Back to Dashboard" onAction="#handleBack" styleClass="btn, btn-secondary"
+                    StackPane.alignment="CENTER_LEFT"/>
+            <Text text="My Profile" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: #343a40;"/>
+
+        </StackPane>
+    </top>
+
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20">
+            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+            <VBox maxWidth="400" spacing="20" style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);">
+
+                <Label text="Edit Details" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #495057;"/>
+                <Separator/>
+
+                <VBox spacing="5">
+                    <Label text="Username"/>
+                    <TextField fx:id="usernameField" styleClass="form-control"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Email Address"/>
+                    <TextField fx:id="emailField" styleClass="form-control"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="New Password"/>
+                    <PasswordField fx:id="passwordField" promptText="Leave blank to keep current" styleClass="form-control"/>
+                </VBox>
+
+                <Label fx:id="statusLabel" visible="false" wrapText="true"/>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Save Changes" onAction="#handleSave" styleClass="btn, btn-primary" prefWidth="120"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>
