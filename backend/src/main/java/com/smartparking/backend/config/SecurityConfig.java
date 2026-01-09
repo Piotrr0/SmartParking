@@ -21,6 +21,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/parking/**").permitAll()
                         .requestMatchers("/api/bookings/**").permitAll()
                         .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/wallet/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

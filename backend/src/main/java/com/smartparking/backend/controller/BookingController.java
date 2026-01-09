@@ -4,9 +4,11 @@ import com.smartparking.backend.dto.BookingRequest;
 import com.smartparking.backend.entity.Booking;
 import com.smartparking.backend.entity.ParkingSpot;
 import com.smartparking.backend.entity.User;
+import com.smartparking.backend.entity.Wallet;
 import com.smartparking.backend.repository.BookingRepository;
 import com.smartparking.backend.repository.ParkingSpotRepository;
 import com.smartparking.backend.repository.UserRepository;
+import com.smartparking.backend.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ public class BookingController {
     @Autowired private BookingRepository bookingRepository;
     @Autowired private ParkingSpotRepository spotRepository;
     @Autowired private UserRepository userRepository;
+    @Autowired private WalletRepository walletRepository;
 
     @PostMapping("/create")
     public ResponseEntity<?> createBooking(@RequestBody BookingRequest request) {
@@ -44,11 +47,23 @@ public class BookingController {
             User user = userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            if (request.getCardNumber() == null || request.getCardNumber().length() != 16) {
-                return ResponseEntity.badRequest().body("Invalid Card Number");
+            double price = spot.getPricePerHour() * request.getDurationInHours();
+            if ("WALLET".equalsIgnoreCase(request.getPaymentMethod())) {
+                Wallet wallet = walletRepository.findByUserId(user.getId())
+                        .orElseThrow(() -> new RuntimeException("Wallet not found"));
+
+                if (wallet.getBalance() < price) {
+                    return ResponseEntity.badRequest().body("Insufficient wallet balance.");
+                }
+
+                wallet.setBalance(wallet.getBalance() - price);
+                walletRepository.save(wallet);
+            } else {
+                if (request.getCardNumber() == null || request.getCardNumber().length() != 16) {
+                    return ResponseEntity.badRequest().body("Invalid Card Number");
+                }
             }
 
-            double price = spot.getPricePerHour() * request.getDurationInHours();
             Booking booking = new Booking(user, spot, startTime, endTime, price, "PAID");
             bookingRepository.save(booking);
 
