@@ -91,7 +91,8 @@ public class ParkingController {
         ParkingArea area = areaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Area not found"));
 
-        List<Booking> conflicts = bookingRepository.findOverlappingBookingsForArea(id, start, end);
+
+        List<Booking> conflicts = bookingRepository.findOverlappingBookings(id, start, end);
         Set<Long> bookedSpotIds = conflicts.stream()
                 .map(b -> b.getSpot().getId())
                 .collect(Collectors.toSet());
@@ -110,8 +111,9 @@ public class ParkingController {
             spotDTO.setType(spot.getType());
             spotDTO.setPricePerHour(spot.getPricePerHour());
 
-            boolean reservedInFuture = bookedSpotIds.contains(spot.getId());
-            spotDTO.setOccupied(reservedInFuture);
+            boolean isBooked = bookedSpotIds.contains(spot.getId());
+            spotDTO.setOccupied(isBooked);
+
             spotDTOs.add(spotDTO);
         }
 

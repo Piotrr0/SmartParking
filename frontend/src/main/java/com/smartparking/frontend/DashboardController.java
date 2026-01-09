@@ -103,24 +103,24 @@ public class DashboardController {
             ex.printStackTrace();
         }
     }
-
     @FXML
-    public void handleProfile() {
+    public void handleMyBookings() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("profile-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("my-bookings-view.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            Stage stage = (Stage) parkingGrid.getScene().getWindow();
             Scene scene = new Scene(root);
 
             scene.getStylesheets().addAll(
                     BootstrapFX.bootstrapFXStylesheet(),
-                    ParkingApplication.class.getResource("styles.css").toExternalForm()
+                    getClass().getResource("styles.css").toExternalForm()
             );
 
             stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
+
 }
