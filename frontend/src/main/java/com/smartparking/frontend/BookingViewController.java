@@ -1,5 +1,6 @@
 package com.smartparking.frontend;
 
+import com.smartparking.frontend.service.WalletService;
 import com.smartparking.frontend.service.BookingService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+import javafx.application.Platform;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
@@ -26,6 +29,14 @@ public class BookingViewController {
     @FXML private TextField cardHolderField;
     @FXML private TextField cardNumberField;
 
+    @FXML private RadioButton rbCard;
+    @FXML private RadioButton rbWallet;
+    @FXML private VBox cardFormBox;
+    @FXML private VBox walletInfoBox;
+    @FXML private Label walletBalanceLabel;
+
+    private ToggleGroup paymentGroup;
+    private final WalletService walletService = new WalletService();
     private final BookingService bookingService = new BookingService();
     private Long spotId;
     private Long areaId;
@@ -50,6 +61,27 @@ public class BookingViewController {
 
         durationField.textProperty().addListener((obs, oldVal, newVal) -> calculateTotal());
         calculateTotal();
+        setupPaymentToggle();
+    }
+
+    private void setupPaymentToggle() {
+        paymentGroup = new ToggleGroup();
+        rbCard.setToggleGroup(paymentGroup);
+        rbWallet.setToggleGroup(paymentGroup);
+
+        paymentGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            boolean isWallet = rbWallet.isSelected();
+            cardFormBox.setVisible(!isWallet);
+            walletInfoBox.setVisible(isWallet);
+
+            if (isWallet) {
+                Long userId = UserSession.getInstance().getUserId();
+                new Thread(() -> {
+                    double balance = walletService.getBalance(userId);
+                    Platform.runLater(() -> walletBalanceLabel.setText(String.format("Available: $%.2f", balance)));
+                }).start();
+            }
+        });
     }
 
     private void setupTimeSpinner() {
@@ -74,8 +106,8 @@ public class BookingViewController {
     @FXML
     public void handleSubmit() {
         try {
-            if (datePicker.getValue() == null || cardHolderField.getText().isEmpty() || cardNumberField.getText().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Missing Info", "Please fill in all fields.");
+            if (datePicker.getValue() == null) {
+                showAlert(Alert.AlertType.WARNING, "Missing Info", "Please select a date.");
                 return;
             }
 
@@ -83,11 +115,21 @@ public class BookingViewController {
             int hour = timeSpinner.getValue();
             LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(hour, 0));
             int duration = Integer.parseInt(durationField.getText());
-            String cardNum = cardNumberField.getText();
-            String cardHolder = cardHolderField.getText();
+
+            String paymentMethod = rbWallet.isSelected() ? "WALLET" : "CARD";
+            String cardNum = "";
+            String cardHolder = "";
+            if ("CARD".equals(paymentMethod)) {
+                if (cardHolderField.getText().isEmpty() || cardNumberField.getText().isEmpty()) {
+                    showAlert(Alert.AlertType.WARNING, "Missing Info", "Please fill in card details.");
+                    return;
+                }
+                cardNum = cardNumberField.getText();
+                cardHolder = cardHolderField.getText();
+            }
 
             Long userId = (UserSession.getInstance() != null) ? UserSession.getInstance().getUserId() : 1L;
-            String response = bookingService.createBooking(userId, spotId, startDateTime, duration, cardNum, cardHolder);
+            String response = bookingService.createBooking(userId, spotId, startDateTime, duration, cardNum, cardHolder, paymentMethod);
 
             if (!response.startsWith("Error")) {
                 showAlert(Alert.AlertType.INFORMATION, "Success", response);

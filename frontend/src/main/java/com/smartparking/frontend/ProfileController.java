@@ -2,6 +2,7 @@ package com.smartparking.frontend;
 
 import com.smartparking.frontend.dto.UserDTO;
 import com.smartparking.frontend.service.UserService;
+import com.smartparking.frontend.service.WalletService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,10 @@ public class ProfileController {
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private Label statusLabel;
+    @FXML private Label balanceLabel;
+    @FXML private TextField topUpField;
 
+    private final WalletService walletService = new WalletService();
     private final UserService userService = new UserService();
     private Long currentUserId;
 
@@ -27,7 +31,15 @@ public class ProfileController {
         if (UserSession.getInstance() != null) {
             this.currentUserId = UserSession.getInstance().getUserId();
             loadUserData();
+            loadWalletData();
         }
+    }
+
+    private void loadWalletData() {
+        new Thread(() -> {
+            double balance = walletService.getBalance(currentUserId);
+            Platform.runLater(() -> balanceLabel.setText(String.format("$%.2f", balance)));
+        }).start();
     }
 
     private void loadUserData() {
@@ -42,6 +54,27 @@ public class ProfileController {
                 }
             });
         }).start();
+    }
+
+    @FXML
+    public void handleTopUp() {
+        try {
+            double amount = Double.parseDouble(topUpField.getText());
+            new Thread(() -> {
+                boolean success = walletService.topUp(currentUserId, amount);
+                Platform.runLater(() -> {
+                    if (success) {
+                        topUpField.clear();
+                        loadWalletData();
+                        showAlert("Success", "Wallet charged successfully!");
+                    } else {
+                        showAlert("Error", "Failed to charge wallet.");
+                    }
+                });
+            }).start();
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Invalid amount.");
+        }
     }
 
     @FXML

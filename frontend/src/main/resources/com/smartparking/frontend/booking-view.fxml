@@ -64,16 +64,33 @@
                     <Label text="Duration (Hours)"/>
                     <TextField fx:id="durationField" text="2"/>
                 </VBox>
+
                 <Separator/>
-                <Text text="Payment Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-                <VBox>
-                    <Label text="Card Holder Name"/>
-                    <TextField fx:id="cardHolderField" promptText="e.g. John Doe"/>
-                </VBox>
-                <VBox>
-                    <Label text="Card Number"/>
-                    <TextField fx:id="cardNumberField" promptText="0000 0000 0000 0000"/>
-                </VBox>
+                <Text text="Payment Method" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <HBox spacing="20">
+                    <RadioButton fx:id="rbCard" text="Credit Card" selected="true"/>
+                    <RadioButton fx:id="rbWallet" text="My Wallet"/>
+                </HBox>
+
+                <StackPane>
+                    <VBox fx:id="cardFormBox" spacing="10">
+                        <VBox>
+                            <Label text="Card Holder Name"/>
+                            <TextField fx:id="cardHolderField" promptText="e.g. John Doe"/>
+                        </VBox>
+                        <VBox>
+                            <Label text="Card Number"/>
+                            <TextField fx:id="cardNumberField" promptText="0000 0000 0000 0000"/>
+                        </VBox>
+                    </VBox>
+
+                    <VBox fx:id="walletInfoBox" visible="false" alignment="CENTER" spacing="10" style="-fx-padding: 20; -fx-background-color: #f8f9fa; -fx-background-radius: 5;">
+                        <Label text="Paying with Wallet Balance" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="walletBalanceLabel" text="Available: $0.00" style="-fx-text-fill: #198754;"/>
+                    </VBox>
+                </StackPane>
+
                 <Region VBox.vgrow="ALWAYS"/>
                 <Button text="Confirm &amp; Pay" onAction="#handleSubmit"
                         styleClass="btn, btn-success"

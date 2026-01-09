@@ -7,10 +7,11 @@ public class BookingRequest {
     private int durationInHours;
     private String cardNumber;
     private String cardHolder;
+    private String paymentMethod;
 
     public BookingRequest() {}
 
-    public BookingRequest(Long userId, Long spotId, String startTime, int durationInHours, String cardNumber, String cardHolder) {
+    public BookingRequest(Long userId, Long spotId, String startTime, int durationInHours, String cardNumber, String cardHolder, String paymentMethod) {
         this.userId = userId;
         this.spotId = spotId;
         this.startTime = startTime;
