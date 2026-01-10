@@ -27,6 +27,7 @@ public class ParkingSpotsController {
 
     @FXML private DatePicker dateFilter;
     @FXML private ComboBox<Integer> timeFilter;
+    @FXML private TextField minuteFilter;
     @FXML private TextField durationFilter;
 
     private final ParkingService parkingService = new ParkingService();
@@ -40,28 +41,36 @@ public class ParkingSpotsController {
 
         int nextHour = LocalTime.now().plusHours(1).getHour();
         timeFilter.setValue(nextHour);
+        minuteFilter.setText("00");
 
         handleCheckAvailability();
     }
 
     @FXML
     public void handleCheckAvailability() {
-        if (dateFilter.getValue() == null || timeFilter.getValue() == null || durationFilter.getText().isEmpty()) {
+        if (dateFilter.getValue() == null || timeFilter.getValue() == null || minuteFilter.getText().isEmpty() || durationFilter.getText().isEmpty()) {
             return;
         }
 
-        LocalDateTime selectedStart = LocalDateTime.of(dateFilter.getValue(), LocalTime.of(timeFilter.getValue(), 0));
-        int duration = 2;
         try {
-            duration = Integer.parseInt(durationFilter.getText());
-        } catch (NumberFormatException e) {
-            durationFilter.setText("2");
-        }
+            int minute = Integer.parseInt(minuteFilter.getText());
+            if (minute < 0 || minute > 59) {
+                minute = 0;
+                minuteFilter.setText("00");
+            }
 
-        ParkingAreaRequest area = parkingService.getParkingAreaAvailability(currentAreaId, selectedStart.toString(), duration);
-        if (area != null) {
-            updateUI(area);
-        }
+            LocalDateTime selectedStart = LocalDateTime.of(
+                    dateFilter.getValue(),
+                    LocalTime.of(timeFilter.getValue(), minute)
+            );
+
+            int duration = Integer.parseInt(durationFilter.getText());
+
+            ParkingAreaRequest area = parkingService.getParkingAreaAvailability(currentAreaId, selectedStart.toString(), duration);
+            if (area != null) {
+                updateUI(area);
+            }
+        } catch (NumberFormatException e) { }
     }
 
     private void updateUI(ParkingAreaRequest area) {
@@ -116,7 +125,12 @@ public class ParkingSpotsController {
             Parent root = loader.load();
 
             BookingViewController controller = loader.getController();
-            LocalDateTime start = LocalDateTime.of(dateFilter.getValue(), LocalTime.of(timeFilter.getValue(), 0));
+            int minute = Integer.parseInt(minuteFilter.getText());
+            LocalDateTime start = LocalDateTime.of(
+                    dateFilter.getValue(),
+                    LocalTime.of(timeFilter.getValue(), minute)
+            );
+
             int duration = Integer.parseInt(durationFilter.getText());
             controller.initData(spot.getId(), spot.getLabel(), spot.getPricePerHour(), currentAreaId, start, duration);
 

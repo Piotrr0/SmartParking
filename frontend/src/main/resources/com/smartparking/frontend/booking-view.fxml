@@ -50,14 +50,30 @@
             <VBox spacing="20" style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);"
                   HBox.hgrow="ALWAYS" maxWidth="500">
                 <Text text="Date &amp; Time" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-                <HBox spacing="15">
-                    <VBox HBox.hgrow="ALWAYS">
-                        <Label text="Date"/>
-                        <DatePicker fx:id="datePicker" maxWidth="Infinity"/>
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Date" style="-fx-text-fill: #6c757d; -fx-font-size: 12px;"/>
+                        <DatePicker fx:id="datePicker" maxWidth="Infinity" styleClass="form-control"/>
                     </VBox>
-                    <VBox HBox.hgrow="ALWAYS">
-                        <Label text="Start Time"/>
-                        <ComboBox fx:id="timeSpinner" maxWidth="Infinity"/>
+
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Start Time" style="-fx-text-fill: #6c757d; -fx-font-size: 12px;"/>
+
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+
+                            <ComboBox fx:id="timeSpinner" promptText="HH"
+                                      styleClass="form-control"
+                                      prefWidth="80"
+                                      style="-fx-font-size: 14px;"/>
+
+                            <Label text=":" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 4 0 0 0;"/>
+
+                            <TextField fx:id="minuteField" promptText="MM"
+                                       styleClass="form-control"
+                                       prefWidth="60"
+                                       alignment="CENTER"
+                                       style="-fx-font-size: 14px;"/>
+                        </HBox>
                     </VBox>
                 </HBox>
                 <VBox>

@@ -25,6 +25,7 @@ public class BookingViewController {
 
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<Integer> timeSpinner;
+    @FXML private TextField minuteField;
     @FXML private TextField durationField;
     @FXML private TextField cardHolderField;
     @FXML private TextField cardNumberField;
@@ -56,6 +57,10 @@ public class BookingViewController {
         datePicker.setValue(startDateTime.toLocalDate());
         setupTimeSpinner();
         timeSpinner.setValue(startDateTime.getHour());
+
+        minuteField.setText(String.format("%02d", startDateTime.getMinute()));
+        addMinuteValidation();
+
         durationField.setText(String.valueOf(duration));
 
         if (UserSession.getInstance() != null) {
@@ -65,6 +70,17 @@ public class BookingViewController {
         durationField.textProperty().addListener((obs, oldVal, newVal) -> calculateTotal());
         calculateTotal();
         setupPaymentToggle();
+    }
+
+    private void addMinuteValidation() {
+        minuteField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) {
+                minuteField.setText(newVal.replaceAll("[^\\d]", ""));
+            }
+            if (minuteField.getText().length() > 2) {
+                minuteField.setText(minuteField.getText().substring(0, 2));
+            }
+        });
     }
 
     private void setupPaymentToggle() {
@@ -116,7 +132,14 @@ public class BookingViewController {
 
             LocalDate date = datePicker.getValue();
             int hour = timeSpinner.getValue();
-            LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(hour, 0));
+
+            int minute = Integer.parseInt(minuteField.getText());
+            if (minute < 0 || minute > 59) {
+                showAlert(Alert.AlertType.WARNING, "Invalid Time", "Minutes must be between 0 and 59.");
+                return;
+            }
+
+            LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(hour, minute));
             int duration = Integer.parseInt(durationField.getText());
 
             String paymentMethod = rbWallet.isSelected() ? "WALLET" : "CARD";
