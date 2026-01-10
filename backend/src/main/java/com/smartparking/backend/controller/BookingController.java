@@ -65,6 +65,12 @@ public class BookingController {
                 if (request.getCardNumber() == null || request.getCardNumber().length() != 16) {
                     return ResponseEntity.badRequest().body("Invalid Card Number");
                 }
+                if (request.getCvv() == null || request.getCvv().length() != 3) {
+                    return ResponseEntity.badRequest().body("Invalid CVV (must be 3 digits)");
+                }
+                if (request.getExpiry() == null || request.getExpiry().isEmpty()) {
+                    return ResponseEntity.badRequest().body("Expiration Date is required");
+                }
             }
 
             Booking booking = new Booking(user, spot, startTime, endTime, price, "PAID");

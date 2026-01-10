@@ -8,10 +8,14 @@ public class BookingRequest {
     private String cardNumber;
     private String cardHolder;
     private String paymentMethod;
+    private String cvv;
+    private String expiry;
 
     public BookingRequest() {}
 
-    public BookingRequest(Long userId, Long spotId, String startTime, int durationInHours, String cardNumber, String cardHolder, String paymentMethod) {
+    public BookingRequest(Long userId, Long spotId, String startTime, int durationInHours,
+                          String cardNumber, String cardHolder, String paymentMethod,
+                          String cvv, String expiry) {
         this.userId = userId;
         this.spotId = spotId;
         this.startTime = startTime;
@@ -19,6 +23,8 @@ public class BookingRequest {
         this.cardNumber = cardNumber;
         this.cardHolder = cardHolder;
         this.paymentMethod = paymentMethod;
+        this.cvv = cvv;
+        this.expiry = expiry;
     }
 
     public Long getUserId() { return userId; }
@@ -35,4 +41,8 @@ public class BookingRequest {
     public void setCardHolder(String cardHolder) { this.cardHolder = cardHolder; }
     public String getPaymentMethod() { return paymentMethod; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public String getCvv() { return cvv; }
+    public void setCvv(String cvv) { this.cvv = cvv; }
+    public String getExpiry() { return expiry; }
+    public void setExpiry(String expiry) { this.expiry = expiry; }
 }

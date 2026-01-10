@@ -37,7 +37,11 @@
                 </VBox>
                 <VBox spacing="5">
                     <Label text="Start Time (24h)" style="-fx-font-size: 11px; -fx-text-fill: #6c757d;"/>
-                    <ComboBox fx:id="timeFilter" prefWidth="100"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <ComboBox fx:id="timeFilter" prefWidth="70"/>
+                        <Label text=":"/>
+                        <TextField fx:id="minuteFilter" promptText="MM" prefWidth="40" text="00"/>
+                    </HBox>
                 </VBox>
                 <VBox spacing="5">
                     <Label text="Duration (Hours)" style="-fx-font-size: 11px; -fx-text-fill: #6c757d;"/>
