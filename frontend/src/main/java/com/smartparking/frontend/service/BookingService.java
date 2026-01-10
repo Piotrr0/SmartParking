@@ -22,12 +22,14 @@ public class BookingService {
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public String createBooking(Long userId, Long spotId, LocalDateTime start, int hours, String cardNum, String name, String paymentMethod) {
+    public String createBooking(Long userId, Long spotId, LocalDateTime start, int hours,
+                                String cardNum, String name, String paymentMethod,
+                                String cvv, String expiry) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
             String formattedDate = start.format(formatter);
 
-            BookingRequest bookingRequest = new BookingRequest(userId, spotId, formattedDate, hours, cardNum, name, paymentMethod);
+            BookingRequest bookingRequest = new BookingRequest(userId, spotId, formattedDate, hours, cardNum, name, paymentMethod, cvv, expiry);
             String jsonBody = mapper.writeValueAsString(bookingRequest);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL + "/create"))

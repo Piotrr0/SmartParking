@@ -11,6 +11,8 @@ public class BookingRequest {
     private int durationInHours;
     private String cardNumber;
     private String cardHolder;
+    private String cvv;
+    private String expiry;
 
     public BookingRequest() {}
     public BookingRequest(Long userId, Long spotId, LocalDateTime startTime, int durationInHours,  String cardNumber, String cardHolder) {
@@ -36,4 +38,8 @@ public class BookingRequest {
     public void setCardHolder(String cardHolder) { this.cardHolder = cardHolder; }
     public String getPaymentMethod() { return paymentMethod; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public String getCvv() { return cvv; }
+    public void setCvv(String cvv) { this.cvv = cvv; }
+    public String getExpiry() { return expiry; }
+    public void setExpiry(String expiry) { this.expiry = expiry; }
 }

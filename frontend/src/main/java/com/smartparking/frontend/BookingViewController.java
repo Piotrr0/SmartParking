@@ -28,6 +28,9 @@ public class BookingViewController {
     @FXML private TextField durationField;
     @FXML private TextField cardHolderField;
     @FXML private TextField cardNumberField;
+    @FXML private TextField cvvField;
+    @FXML private TextField expiryField;
+
 
     @FXML private RadioButton rbCard;
     @FXML private RadioButton rbWallet;
@@ -119,17 +122,24 @@ public class BookingViewController {
             String paymentMethod = rbWallet.isSelected() ? "WALLET" : "CARD";
             String cardNum = "";
             String cardHolder = "";
+            String cvv = "";
+            String expiry = "";
+
             if ("CARD".equals(paymentMethod)) {
-                if (cardHolderField.getText().isEmpty() || cardNumberField.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.WARNING, "Missing Info", "Please fill in card details.");
+                if (cardHolderField.getText().isEmpty() || cardNumberField.getText().isEmpty() ||
+                        cvvField.getText().isEmpty() || expiryField.getText().isEmpty()) {
+                    showAlert(Alert.AlertType.WARNING, "Missing Info", "Please fill in all card details.");
                     return;
                 }
                 cardNum = cardNumberField.getText();
                 cardHolder = cardHolderField.getText();
+                cvv = cvvField.getText();
+                expiry = expiryField.getText();
             }
 
             Long userId = (UserSession.getInstance() != null) ? UserSession.getInstance().getUserId() : 1L;
-            String response = bookingService.createBooking(userId, spotId, startDateTime, duration, cardNum, cardHolder, paymentMethod);
+
+            String response = bookingService.createBooking(userId, spotId, startDateTime, duration, cardNum, cardHolder, paymentMethod, cvv, expiry);
 
             if (!response.startsWith("Error")) {
                 showAlert(Alert.AlertType.INFORMATION, "Success", response);

@@ -83,6 +83,17 @@
                             <Label text="Card Number"/>
                             <TextField fx:id="cardNumberField" promptText="0000 0000 0000 0000"/>
                         </VBox>
+
+                        <HBox spacing="10">
+                            <VBox HBox.hgrow="ALWAYS">
+                                <Label text="Expiry"/>
+                                <TextField fx:id="expiryField" promptText="MM/YY"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS">
+                                <Label text="CVV"/>
+                                <TextField fx:id="cvvField" promptText="123"/>
+                            </VBox>
+                        </HBox>
                     </VBox>
 
                     <VBox fx:id="walletInfoBox" visible="false" alignment="CENTER" spacing="10" style="-fx-padding: 20; -fx-background-color: #f8f9fa; -fx-background-radius: 5;">
