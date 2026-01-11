@@ -5,6 +5,7 @@ import com.smartparking.frontend.dto.ParkingAreaRequest;
 import com.smartparking.frontend.service.ParkingService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TextField;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,13 +17,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 
 public class DashboardController {
 
     @FXML private Label welcomeLabel;
     @FXML private FlowPane parkingGrid;
+    @FXML private TextField searchField;
 
     private final ParkingService parkingService = new ParkingService();
+    private List<ParkingAreaRequest> allParkingAreas = new ArrayList<>();
 
     public void initialize() {
         if (UserSession.getInstance() != null) {
@@ -31,6 +35,9 @@ public class DashboardController {
             welcomeLabel.setText("Welcome back, User");
         }
 
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterParkingAreas(newValue);
+        });
         loadParkingData();
     }
 
@@ -40,13 +47,24 @@ public class DashboardController {
 
     @FXML
     public void loadParkingData() {
-        parkingGrid.getChildren().clear();
-        List<ParkingAreaRequest> areas = parkingService.getAllParkingAreas();
+        allParkingAreas = parkingService.getAllParkingAreas();
+        renderParkingAreas(allParkingAreas);
+    }
 
-        for (ParkingAreaRequest area : areas) {
-            VBox card = createParkingCard(area);
-            parkingGrid.getChildren().add(card);
+    private void filterParkingAreas(String searchText) {
+        if (searchText == null || searchText.isEmpty()) {
+            renderParkingAreas(allParkingAreas);
+            return;
         }
+
+        String lowerCaseFilter = searchText.toLowerCase();
+
+        List<ParkingAreaRequest> filteredList = allParkingAreas.stream()
+                .filter(area -> area.getName().toLowerCase().contains(lowerCaseFilter) ||
+                        area.getCity().toLowerCase().contains(lowerCaseFilter))
+                .toList();
+
+        renderParkingAreas(filteredList);
     }
 
     private VBox createParkingCard(ParkingAreaRequest area) {
@@ -68,6 +86,14 @@ public class DashboardController {
         viewBtn.setOnAction(e -> openSpotsView(area.getId()));
         card.getChildren().addAll(name, city, viewBtn);
         return card;
+    }
+
+    private void renderParkingAreas(List<ParkingAreaRequest> areas) {
+        parkingGrid.getChildren().clear();
+        for (ParkingAreaRequest area : areas) {
+            VBox card = createParkingCard(area);
+            parkingGrid.getChildren().add(card);
+        }
     }
 
     @FXML
