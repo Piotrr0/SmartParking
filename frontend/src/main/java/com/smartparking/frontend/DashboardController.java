@@ -25,7 +25,14 @@ public class DashboardController {
     private final ParkingService parkingService = new ParkingService();
 
     public void initialize() {
-        loadParkingData(); }
+        if (UserSession.getInstance() != null) {
+            setUsername(UserSession.getInstance().getUsername());
+        } else {
+            welcomeLabel.setText("Welcome back, User");
+        }
+
+        loadParkingData();
+    }
 
     public void setUsername(String username) {
         welcomeLabel.setText("Welcome back, " + username);
