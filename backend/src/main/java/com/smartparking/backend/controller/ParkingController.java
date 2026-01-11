@@ -119,5 +119,17 @@ public class ParkingController {
         return areaDTO;
     }
 
+    @GetMapping("/areas/search")
+    public List<ParkingAreaRequest> searchAreas(@RequestParam String query) {
+        List<ParkingArea> areas = areaRepository.findByNameContainingIgnoreCaseOrCityContainingIgnoreCase(query, query);
+
+        return areas.stream().map(area -> {
+            ParkingAreaRequest dto = new ParkingAreaRequest();
+            dto.setId(area.getId());
+            dto.setName(area.getName());
+            dto.setCity(area.getCity());
+            return dto;
+        }).collect(Collectors.toList());
+    }
     public record SpotAddRequest(Long areaId, String label, double price, String type) {}
 }

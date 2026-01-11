@@ -72,4 +72,22 @@ public class ParkingService {
         }
         return null;
     }
+
+    public List<ParkingAreaRequest> searchParkingAreas(String query) {
+        try {
+            String encodedQuery = java.net.URLEncoder.encode(query, java.nio.charset.StandardCharsets.UTF_8);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL + "/areas/search?query=" + encodedQuery))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                return mapper.readValue(response.body(), new TypeReference<List<ParkingAreaRequest>>(){});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
 }

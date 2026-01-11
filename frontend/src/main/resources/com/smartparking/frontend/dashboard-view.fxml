@@ -43,6 +43,9 @@
                     <Label fx:id="welcomeLabel" text="Welcome back, User" style="-fx-text-fill: #6c757d;"/>
                 </VBox>
                 <HBox HBox.hgrow="ALWAYS"/>
+                <javafx.scene.control.TextField fx:id="searchField" promptText="Search by name or city..."
+                                                prefWidth="250" style="-fx-background-radius: 20;"/>
+
                 <Button text="Refresh" onAction="#loadParkingData" styleClass="btn, btn-primary"/>
             </HBox>
 
