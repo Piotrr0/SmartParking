@@ -4,7 +4,12 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "bookings")
+@Table(name = "bookings", indexes = {
+        @Index(name = "idx_booking_user_id", columnList = "user_id"),
+        @Index(name = "idx_booking_spot_id", columnList = "spot_id"),
+        @Index(name = "idx_booking_overlap", columnList = "spot_id, startTime, endTime"),
+        @Index(name = "idx_booking_start_time", columnList = "startTime")
+})
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

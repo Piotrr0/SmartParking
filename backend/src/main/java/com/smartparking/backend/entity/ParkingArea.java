@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "parking_areas")
+@Table(name = "parking_areas", indexes = {
+        @Index(name = "idx_parking_area_name", columnList = "name"),
+        @Index(name = "idx_parking_area_city", columnList = "city")
+})
 public class ParkingArea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

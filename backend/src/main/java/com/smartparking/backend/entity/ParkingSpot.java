@@ -5,9 +5,14 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "parking_spots")
+@Table(name = "parking_spots", indexes = {
+        @Index(name = "idx_spot_area_id", columnList = "area_id"),
+        @Index(name = "idx_spot_occupied_expiration", columnList = "occupied, expirationTime"),
+        @Index(name = "idx_spot_label_area", columnList = "label, area_id")
+})
 public class ParkingSpot {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String label;
