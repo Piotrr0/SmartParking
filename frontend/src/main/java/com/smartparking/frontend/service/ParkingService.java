@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ParkingService {
-    private static final String API_URL = "http://localhost:8080/api/parking";
+    private static final String API_URL = "http://localhost:8082/api/parking";
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -27,7 +27,8 @@ public class ParkingService {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                return mapper.readValue(response.body(), new TypeReference<List<ParkingAreaRequest>>(){});
+                return mapper.readValue(response.body(), new TypeReference<List<ParkingAreaRequest>>() {
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,7 +84,8 @@ public class ParkingService {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                return mapper.readValue(response.body(), new TypeReference<List<ParkingAreaRequest>>(){});
+                return mapper.readValue(response.body(), new TypeReference<List<ParkingAreaRequest>>() {
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();

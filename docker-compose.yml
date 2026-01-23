@@ -5,7 +5,6 @@ services:
     image: mysql:8.0
     container_name: parking-db
     environment:
-      MYSQL_DATABASE: ${MYSQL_DB_NAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
@@ -16,18 +15,37 @@ services:
           timeout: 20s
           retries: 10
 
-  backend:
-    build: ./backend
-    container_name: parking-api
+  user-service:
+    build:
+      context: ./backend
+      dockerfile: user-service/Dockerfile
+    container_name: user-service
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       db:
         condition: service_healthy
     environment:
       - DB_HOST=db
-      - DB_NAME=${MYSQL_DB_NAME}
       - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    restart: on-failure
+
+  parking-service:
+    build:
+      context: ./backend
+      dockerfile: parking-service/Dockerfile
+    container_name: parking-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      db:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - USER_SERVICE_URL=http://user-service:8081
     restart: on-failure
 
 volumes:

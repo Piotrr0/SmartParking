@@ -10,7 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class WalletService {
-    private static final String API_URL = "http://localhost:8080/api/wallet";
+    private static final String API_URL = "http://localhost:8081/api/wallet";
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -25,7 +25,9 @@ public class WalletService {
                 JsonNode node = mapper.readTree(response.body());
                 return node.get("balance").asDouble();
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return 0.0;
     }
 
