@@ -18,18 +18,19 @@ import java.util.Collections;
 import java.util.List;
 
 public class BookingService {
-    private static final String API_URL = "http://localhost:8080/api/bookings";
+    private static final String API_URL = "http://localhost:8082/api/bookings";
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
 
     public String createBooking(Long userId, Long spotId, LocalDateTime start, int hours,
-                                String cardNum, String name, String paymentMethod,
-                                String cvv, String expiry) {
+            String cardNum, String name, String paymentMethod,
+            String cvv, String expiry) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
             String formattedDate = start.format(formatter);
 
-            BookingRequest bookingRequest = new BookingRequest(userId, spotId, formattedDate, hours, cardNum, name, paymentMethod, cvv, expiry);
+            BookingRequest bookingRequest = new BookingRequest(userId, spotId, formattedDate, hours, cardNum, name,
+                    paymentMethod, cvv, expiry);
             String jsonBody = mapper.writeValueAsString(bookingRequest);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL + "/create"))
@@ -59,10 +60,11 @@ public class BookingService {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-
             if (response.statusCode() == 200) {
-                mapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                return mapper.readValue(response.body(), new TypeReference<List<BookingResponse>>(){});
+                mapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                        false);
+                return mapper.readValue(response.body(), new TypeReference<List<BookingResponse>>() {
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();

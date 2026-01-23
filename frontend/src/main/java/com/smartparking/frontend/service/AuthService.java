@@ -10,7 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class AuthService {
-    private static final String API_URL = "http://localhost:8080/api/auth";
+    private static final String API_URL = "http://localhost:8081/api/auth";
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
 
